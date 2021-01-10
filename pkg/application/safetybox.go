@@ -44,7 +44,7 @@ func (sba *SafetyBoxApp) DeleteSafetyBox(id int) (int64, error) {
 func (sba *SafetyBoxApp) CreateSafetyBox(req *request.CreateSBReq) (int64, error) {
 	newSb := &dto.SafetyBox{}
 	newSb.Username = req.Username
-	newSb.SecretPass = req.SecretPass
+	newSb.SecretPass = req.SecretPass //this one should be required
 	key := *req.Key
 	newSb.Email = req.Email
 	newSb.Platform = *req.Platform

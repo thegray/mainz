@@ -5,9 +5,9 @@ const (
 
 	InsertSafetyBox = `
 	INSERT INTO 
-		safetybox (username, secret_pass, email, platform, details, secret_info, cred_id) 
+		safetybox (secret_pass, secret_info, acc_id) 
 	VALUES 
-		(?, ?, ?, ?, ?, ?, ?)`
+		(?, ?, ?)`
 
 	InsertSBToCategory = `
 	INSERT INTO 

@@ -26,14 +26,17 @@ func Start() {
 	}
 
 	credStore := store.NewCredentialStore(&dbImpl)
+	accStore := store.NewAccountStore(&dbImpl)
 	sftbStore := store.NewSafetyBoxStore(&dbImpl)
 
 	credApp := application.NewCredApp(credStore)
+	accApp := application.NewAccountApp(accStore)
 	sbApp := application.NewSafetyBoxApp(sftbStore)
 
 	credSvc := service.NewCredService(credApp)
+	accSvc := service.NewAccountService(accApp)
 	sftBoxSvc := service.NewSafetyBoxService(sbApp)
-	services := transport.NewServices(credSvc, sftBoxSvc)
+	services := transport.NewServices(credSvc, sftBoxSvc, accSvc)
 
 	services.Init(v1Route)
 

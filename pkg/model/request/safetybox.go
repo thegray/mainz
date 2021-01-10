@@ -1,6 +1,6 @@
 package request
 
-type ByIdReq struct {
+type SBByIdReq struct {
 	ID *int `json:"id" validate:"required"`
 }
 
@@ -8,19 +8,6 @@ type GetSecretById struct {
 	ID  *int    `json:"id" validate:"required"`
 	Key *string `json:"k" validate:"required"`
 }
-
-type CreateSBReq struct {
-	Username   string  `json:"un"`
-	SecretPass string  `json:"sp"`
-	Key        *string `json:"k" validate:"required"`
-	Email      string  `json:"em" validate:"omitempty,email"`
-	Platform   *string `json:"pf" validate:"required"`
-	Details    string  `json:"dt"`
-	SecretInfo string  `json:"si"`
-	CredID     *int    `json:"cid" validate:"required"`
-	CategoryID []int   `json:"catid"`
-}
-
 type UpdateSBReq struct {
 	ID       *int    `json:"id" validate:"required"`
 	Username string  `json:"un"`

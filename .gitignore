@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+.gitsecret/keys/random_seed
+!*.secret
+pkg/lib/core/crypto.go
+pkg/util/cryptoutil/crypto.go

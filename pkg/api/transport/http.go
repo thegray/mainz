@@ -10,12 +10,14 @@ import (
 type ServiceMap struct {
 	credential *service.CredService
 	safetybox  *service.SafetyBox
+	account    *service.Account
 }
 
-func NewServices(cred *service.CredService, sb *service.SafetyBox) *ServiceMap {
+func NewServices(cred *service.CredService, sb *service.SafetyBox, acc *service.Account) *ServiceMap {
 	srvs := ServiceMap{
 		credential: cred,
 		safetybox:  sb,
+		account:    acc,
 	}
 	return &srvs
 }
@@ -28,12 +30,14 @@ func (srvs *ServiceMap) Init(r *echo.Group) {
 	r.POST("/logout", mw.JWTAuthorization(srvs.credential.Logout))
 	r.POST("/cred/change", srvs.credential.ChangePassword) //TODO
 
+	// endpoint to create
+	r.POST("/account/create", mw.JWTAuthorization(srvs.account.Create))
+
 	// f*ck restful, all POST
 	r.POST("/safetybox/list", srvs.safetybox.List) //TODO: Implement pagination
 	// endpoint to view single item
 	r.POST("/safetybox", mw.JWTAuthorization(srvs.safetybox.View))
-	// endpoint to create
-	r.POST("/safetybox/create", mw.JWTAuthorization(srvs.safetybox.Create))
+
 	// endpoint to update
 	r.POST("/safetybox/update", mw.JWTAuthorization(srvs.safetybox.Update))
 	// endpoint to update secret

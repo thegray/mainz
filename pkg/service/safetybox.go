@@ -44,13 +44,23 @@ func (sb *SafetyBox) View(c echo.Context) error {
 }
 
 func (sb *SafetyBox) Create(c echo.Context) error {
-	req := &request.CreateSBReq{}
+	req := &request.CreateAccSBReq{}
 	if err := c.Bind(req); err != nil {
 		for _, e := range err.(validator.ValidationErrors) {
 			log.Printf("[Service][SafetyBox][Create] Request Validation fail: %+v \n", e)
 		}
 		return c.JSON(http.StatusBadRequest, response.Error{Code: errcode.GBadRequest, Message: "invalid body request"})
 	}
+	// **** special validation ****
+	var isSecretInputed bool
+	if isSecretInputed = (req.SecretInfo != "") || (req.SecretPass != ""); !isSecretInputed {
+		return c.JSON(http.StatusBadRequest, response.Error{Code: errcode.GBadRequest, Message: "please fill the secret"})
+	}
+	isKeyInputed := req.Key != ""
+	if !((isKeyInputed || isSecretInputed) && !(isKeyInputed && isSecretInputed)) { // XOR expression
+		return c.JSON(http.StatusBadRequest, response.Error{Code: errcode.GBadRequest, Message: "please fill both the secrets AND the key, or none at all"})
+	}
+	// **** end ****
 	createdId, err := sb.app.CreateSafetyBox(req)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, response.Error{Code: errcode.SBFailInsert, Message: "failed insert new item"})
